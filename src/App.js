@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+// import logo from './logo.svg';
+import React, { useState, useEffect } from "react";
+import Character from "./character";
+
+import "./App.css";
+
+// console.clear();
 
 function App() {
+  const [characters, setCharacters] = useState([]);
+
+  useEffect(() => {
+    console.log("mounted");
+    fetch("https://randomuser.me/api?results=25")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setCharacters(data.results);
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log("characters", characters);
+  }, [characters]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      {characters.map((character, index) => {
+        return <Character character={character} />;
+      })}
     </div>
   );
 }
